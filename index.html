@@ -431,6 +431,23 @@
       border-radius: 100px; padding: 4px 10px;
     }
 
+    /* ── WAITLIST BADGE ── */
+    .waitlist-badge {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--mint-light); border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 100px; padding: 8px 18px 8px 12px;
+      font-size: 13px; font-weight: 600; color: var(--mint-dark);
+    }
+    .waitlist-badge .wb-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--mint); flex-shrink: 0;
+      box-shadow: 0 0 8px var(--mint-glow);
+      animation: livePulse 2s ease-in-out infinite;
+    }
+    .waitlist-badge .wb-num {
+      font-size: 16px; font-weight: 800; color: var(--off-black); line-height: 1;
+    }
+
     /* ── REVEAL ── */
     .rv {
       opacity: 0; transform: translateY(20px);
@@ -578,8 +595,8 @@
           <button class="form-btn" type="submit">Get Access</button>
         </form>
         <div class="form-msg" id="heroMsg" style="margin-top:10px;"></div>
+        <div class="waitlist-badge" style="display:none;margin-top:14px;"></div>
         <p class="form-hint" style="margin-top:10px;">Free to join · No credit card · One email at launch</p>
-        <p class="form-hint waitlist-counter" style="margin-top:6px;display:none;"></p>
       </div>
 
       <!-- RIGHT — app card, hidden on mobile via CSS -->
@@ -884,9 +901,9 @@
           <p style="display:none"><input name="bot-field"/></p>
           <h3>Get notified at <span>launch</span></h3>
           <input class="cta-field" type="email" name="email" placeholder="Enter your email address" required/>
+          <div class="waitlist-badge" style="display:none;"></div>
           <button class="cta-submit" type="submit">Get Early Access →</button>
           <div class="form-msg" id="ctaMsg"></div>
-          <p class="cta-fine waitlist-counter" style="display:none;"></p>
           <p class="cta-fine">Invest Like an Insider. Profit Like a Politician.</p>
         </form>
       </div>
@@ -1001,10 +1018,9 @@
         if (!res.ok) return;
         const { count } = await res.json();
         if (typeof count !== 'number') return;
-        const label = count === 1 ? 'person' : 'people';
-        const text = `🎉 ${count.toLocaleString()} ${label} already on the waitlist`;
-        document.querySelectorAll('.waitlist-counter').forEach(el => {
-          el.textContent = text;
+        const label = count === 1 ? 'person already signed up' : 'people already signed up';
+        document.querySelectorAll('.waitlist-badge').forEach(el => {
+          el.innerHTML = `<span class="wb-dot"></span><span class="wb-num">${count.toLocaleString()}</span>${label}`;
           el.style.display = '';
         });
       } catch { /* silently skip if function not deployed */ }
