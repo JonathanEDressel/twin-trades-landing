@@ -193,8 +193,8 @@
       border-bottom: 1px solid var(--gray-border);
       padding: 12px 0; overflow: hidden;
     }
-    .ticker-track { display: flex; animation: tickerScroll 26s linear infinite; width: max-content; }
-    @keyframes tickerScroll { from{transform:translateX(0);}to{transform:translateX(-50%);} }
+    .ticker-track { display: flex; animation: tickerScroll 26s linear infinite; width: max-content; will-change: transform; }
+    @keyframes tickerScroll { from{transform:translate3d(0,0,0);}to{transform:translate3d(-50%,0,0);} }
     .tick {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px; padding: 0 18px; white-space: nowrap;
@@ -913,6 +913,23 @@
   </footer>
 
   <script>
+    // Ticker: clone items until content fills any screen width, then animate by exact set width
+    (function () {
+      document.fonts.ready.then(function () {
+        const track = document.querySelector('.ticker-track');
+        if (!track) return;
+        const setWidth = track.scrollWidth / 2; // HTML has 2 identical sets
+        const firstSet = Array.from(track.children).slice(0, track.children.length / 2);
+        while (track.scrollWidth < window.innerWidth * 3) {
+          firstSet.forEach(n => track.appendChild(n.cloneNode(true)));
+        }
+        const s = document.createElement('style');
+        s.textContent = `@keyframes tickerPx{from{transform:translate3d(0,0,0);}to{transform:translate3d(-${setWidth}px,0,0);}}`;
+        document.head.appendChild(s);
+        track.style.animation = 'tickerPx 26s linear infinite';
+      });
+    }());
+
     // progress bar
     window.addEventListener('scroll', () => {
       const el = document.getElementById('progressBar');
