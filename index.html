@@ -77,7 +77,7 @@
 
     /* ── HERO ── */
     .hero {
-      padding: 80px 20px 48px;
+      padding: 32px 20px 48px;
       position: relative; overflow: hidden;
     }
 
@@ -455,7 +455,7 @@
       /* replace single cta button with two on desktop */
       .nav-cta { display: none; }
 
-      .hero { padding: 110px 40px 60px; }
+      .hero { padding: 40px 40px 60px; }
       .hero-inner { max-width: 1160px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
       .hero-stats { display: none; } /* stats shown in card on desktop */
 
@@ -515,12 +515,19 @@
       <a class="nav-link" href="#brokerages">Brokerages</a>
     </div>
     <div class="nav-actions">
-      <button class="nav-ghost" onclick="document.getElementById('ctaEmail').scrollIntoView({behavior:'smooth'})">Sign Up</button>
-      <button class="nav-solid" style="font-size:13px;font-weight:700;color:#fff;background:var(--blue);border:none;border-radius:10px;padding:9px 20px;cursor:pointer;" onclick="document.getElementById('ctaEmail').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
+      <button class="nav-ghost" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Sign Up</button>
+      <button class="nav-solid" style="font-size:13px;font-weight:700;color:#fff;background:var(--blue);border:none;border-radius:10px;padding:9px 20px;cursor:pointer;" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
     </div>
     <!-- mobile only -->
-    <button class="nav-cta" onclick="document.getElementById('ctaEmail').scrollIntoView({behavior:'smooth'})">Join Waitlist</button>
+    <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Join Waitlist</button>
   </nav>
+
+  <!-- ═══ LOGO HERO ═══ -->
+  <div style="margin-top: 80px; padding: 56px 20px 0; display:flex; flex-direction:column; align-items:center; background:var(--bg);">
+    <img src="logo.png" alt="Twin Trades" class="rv" style="width: clamp(280px, 76vw, 520px); height: clamp(280px, 76vw, 520px); border-radius: clamp(56px, 12vw, 96px); object-fit:contain; background:var(--white); padding: clamp(36px, 8vw, 72px); box-shadow: 0 16px 64px rgba(37,99,235,0.16), 0 4px 16px rgba(0,0,0,0.08); border: 1px solid var(--gray-border);"/>
+    <div class="rv" style="margin-top:20px; font-size: clamp(28px, 7vw, 44px); font-weight:800; letter-spacing:-0.03em; color:var(--off-black);">Twin<span style="color:var(--blue);">Trades</span></div>
+    <div class="rv" style="margin-top:6px; font-size:14px; font-weight:600; color:var(--gray-dark);">Copy-Trading · iOS App</div>
+  </div>
 
   <!-- ═══ HERO ═══ -->
   <section class="hero">
@@ -603,17 +610,17 @@
           <div style="font-size:10px;font-weight:700;color:var(--gray-dark);letter-spacing:0.09em;text-transform:uppercase;margin-bottom:9px;">Following</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--gray-border);">
-              <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563EB,#10B981);flex-shrink:0;"></div>
+              <img src="nancy.png" alt="Nancy Pelosi" style="width:30px;height:30px;border-radius:9px;object-fit:cover;flex-shrink:0;"/>
               <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:var(--off-black);">@senator_alpha</div>
+                <div style="font-size:13px;font-weight:700;color:var(--off-black);">Nancy Pelosi</div>
                 <div style="font-size:11px;color:var(--gray-dark);font-weight:500;">+42.3% YTD</div>
               </div>
               <div style="font-size:11px;font-weight:700;color:var(--mint-dark);background:var(--mint-light);border:1px solid rgba(16,185,129,0.22);border-radius:8px;padding:4px 10px;">Copying</div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--gray-border);">
-              <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#1d4ed8,#6366f1);flex-shrink:0;"></div>
+              <img src="donnie.png" alt="Donald Trump" style="width:30px;height:30px;border-radius:9px;object-fit:cover;flex-shrink:0;"/>
               <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:var(--off-black);">@insider_pro</div>
+                <div style="font-size:13px;font-weight:700;color:var(--off-black);">Donald Trump</div>
                 <div style="font-size:11px;color:var(--gray-dark);font-weight:500;">+28.7% YTD</div>
               </div>
               <div style="font-size:11px;font-weight:700;color:var(--mint-dark);background:var(--mint-light);border:1px solid rgba(16,185,129,0.22);border-radius:8px;padding:4px 10px;">Copying</div>
@@ -863,7 +870,7 @@
           <input type="hidden" name="form-name" value="waitlist"/>
           <p style="display:none"><input name="bot-field"/></p>
           <h3>Get notified at <span>launch</span></h3>
-          <input class="cta-field" type="email" name="email" id="ctaEmail" placeholder="Enter your email address" required/>
+          <input class="cta-field" type="email" name="email" placeholder="Enter your email address" required/>
           <button class="cta-submit" type="submit">Get Early Access →</button>
           <div class="form-msg" id="ctaMsg"></div>
           <p class="cta-fine">Invest Like an Insider. Profit Like a Politician.</p>
