@@ -552,10 +552,12 @@
           Connect your brokerage once — Twin Trades handles every trade for you.
         </p>
 
-        <div class="form-wrap rv">
-          <input class="form-input" type="email" id="heroEmail" placeholder="Enter your email"/>
-          <button class="form-btn" onclick="submitEmail('heroEmail','heroMsg')">Get Access</button>
-        </div>
+        <form class="form-wrap rv" name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event,'heroMsg')">
+          <input type="hidden" name="form-name" value="waitlist"/>
+          <p style="display:none"><input name="bot-field"/></p>
+          <input class="form-input" type="email" name="email" id="heroEmail" placeholder="Enter your email" required/>
+          <button class="form-btn" type="submit">Get Access</button>
+        </form>
         <div class="form-msg" id="heroMsg" style="margin-top:10px;"></div>
         <p class="form-hint" style="margin-top:10px;">Free to join · No credit card · One email at launch</p>
       </div>
@@ -857,13 +859,15 @@
             </div>
           </div>
         </div>
-        <div class="cta-bottom">
+        <form class="cta-bottom" name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event,'ctaMsg')">
+          <input type="hidden" name="form-name" value="waitlist"/>
+          <p style="display:none"><input name="bot-field"/></p>
           <h3>Get notified at <span>launch</span></h3>
-          <input class="cta-field" type="email" id="ctaEmail" placeholder="Enter your email address"/>
-          <button class="cta-submit" onclick="submitEmail('ctaEmail','ctaMsg')">Get Early Access →</button>
+          <input class="cta-field" type="email" name="email" id="ctaEmail" placeholder="Enter your email address" required/>
+          <button class="cta-submit" type="submit">Get Early Access →</button>
           <div class="form-msg" id="ctaMsg"></div>
           <p class="cta-fine">Invest Like an Insider. Profit Like a Politician.</p>
-        </div>
+        </form>
       </div>
     </div>
   </section>
@@ -910,39 +914,40 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
-    // email submit
-    async function submitEmail(inputId, msgId) {
-      const input = document.getElementById(inputId);
+    // email submit — Netlify Forms
+    async function handleSubmit(e, msgId) {
+      e.preventDefault();
+      const form = e.target;
       const msgEl = document.getElementById(msgId);
-      const email = input.value.trim();
+      const email = form.querySelector('[name=email]').value.trim();
 
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         show(msgEl, 'Please enter a valid email address.', 'err'); return;
       }
 
-      const allBtns = document.querySelectorAll(`button[onclick*="${inputId}"]`);
-      allBtns.forEach(b => { b.textContent = 'Sending…'; b.disabled = true; });
+      const lastSubmit = localStorage.getItem('tt_last_submit');
+      if (lastSubmit && Date.now() - Number(lastSubmit) < 60000) {
+        show(msgEl, 'Please wait a moment before submitting again.', 'err'); return;
+      }
+
+      const btn = form.querySelector('button[type=submit]');
+      const originalText = btn.textContent;
+      btn.textContent = 'Sending…'; btn.disabled = true;
 
       try {
-        const SID = 'YOUR_SERVICE_ID', TID = 'YOUR_TEMPLATE_ID', PK = 'YOUR_PUBLIC_KEY';
-        if (SID === 'YOUR_SERVICE_ID') throw new Error('no svc');
-        const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ service_id: SID, template_id: TID, user_id: PK,
-            template_params: { to_email: 'jonathanedressel@gmail.com', from_email: email,
-              message: 'New Twin Trades waitlist signup: ' + email }})
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ 'form-name': 'waitlist', email }).toString()
         });
-        if (!r.ok) throw new Error();
+        if (!res.ok) throw new Error();
+        localStorage.setItem('tt_last_submit', Date.now());
         show(msgEl, "✓ You're on the list! We'll be in touch at launch.", 'ok');
-        input.value = '';
+        form.reset();
       } catch {
-        const s = encodeURIComponent('Twin Trades Waitlist: ' + email);
-        const b = encodeURIComponent('New signup: ' + email);
-        window.location.href = `mailto:jonathanedressel@gmail.com?subject=${s}&body=${b}`;
-        show(msgEl, '✓ Opening your mail client to complete signup.', 'ok');
-        input.value = '';
+        show(msgEl, 'Something went wrong. Please try again.', 'err');
       } finally {
-        allBtns.forEach(b => { b.textContent = 'Get Early Access →'; b.disabled = false; });
+        btn.textContent = originalText; btn.disabled = false;
       }
     }
 
