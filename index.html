@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Twin Trades — Invest Like an Insider.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Lora:ital,wght@1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:      #FFFFFF;
+      --off-black:  #111827;
+      --blue:       #2563EB;
+      --blue-dark:  #1d4ed8;
+      --blue-light: rgba(37,99,235,0.09);
+      --blue-glow:  rgba(37,99,235,0.28);
+      --gray:       #6B7280;
+      --gray-dark:  #374151;   /* boosted for contrast on light bg */
+      --gray-border: rgba(17,24,39,0.12);
+      --gray-bg:    #F3F4F6;
+      --mint:       #10B981;
+      --mint-dark:  #059669;   /* boosted for contrast */
+      --mint-light: rgba(16,185,129,0.09);
+      --mint-glow:  rgba(16,185,129,0.28);
+      --bg:         #F9FAFB;
+      --surface:    #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg);
+      color: var(--off-black);
+      overflow-x: hidden;
+    }
+
+    /* ── PROGRESS BAR ── */
+    #progressBar {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--mint));
+      transition: width 0.1s linear;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 9px; }
+    .nav-logo img { height: 30px; width: 30px; object-fit: contain; }
+    .nav-wordmark { font-size: 16px; font-weight: 800; color: var(--off-black); letter-spacing: -0.02em; }
+    .nav-wordmark span { color: var(--blue); }
+
+    .nav-links { display: none; } /* hidden on mobile */
+
+    .nav-cta {
+      font-size: 13px; font-weight: 700; color: var(--white);
+      background: var(--blue); border: none;
+      border-radius: 8px; padding: 8px 16px; cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--blue-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 20px 48px;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    }
+    .hero-shape-1 {
+      position: absolute; top: -60px; right: -60px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%);
+    }
+    .hero-shape-2 {
+      position: absolute; bottom: 0; left: -40px;
+      width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 70%);
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 480px; margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue-light); border: 1px solid rgba(37,99,235,0.22);
+      border-radius: 100px; padding: 5px 14px 5px 8px;
+      margin-bottom: 24px;
+    }
+    .badge-pip {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--blue); display: grid; place-items: center; flex-shrink: 0;
+    }
+    .badge-pip svg { width: 9px; height: 9px; }
+    .hero-badge span { font-size: 12px; font-weight: 700; color: var(--blue); }
+
+    h1 {
+      font-size: clamp(36px, 9vw, 56px);
+      font-weight: 800; line-height: 1.08;
+      letter-spacing: -0.03em; color: var(--off-black);
+      margin-bottom: 18px;
+    }
+    h1 .hl-blue { color: var(--blue); }
+    h1 .hl-mint { color: var(--mint-dark); }
+
+    .hero-sub {
+      font-family: 'Lora', serif;
+      font-size: 17px; font-style: italic;
+      color: var(--gray-dark); /* was --gray — now much more readable */
+      line-height: 1.7; margin-bottom: 36px;
+    }
+
+    /* form */
+    .form-wrap { display: flex; flex-direction: column; gap: 10px; }
+    .form-input {
+      width: 100%; padding: 14px 16px;
+      background: var(--white); border: 1.5px solid var(--gray-border);
+      border-radius: 12px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; color: var(--off-black);
+      outline: none; transition: border-color 0.25s, box-shadow 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .form-input::placeholder { color: var(--gray); }
+    .form-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-light);
+    }
+    .form-btn {
+      width: 100%; padding: 14px;
+      background: var(--blue); color: var(--white);
+      border: none; border-radius: 12px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 800;
+      cursor: pointer; transition: background 0.2s, box-shadow 0.2s;
+    }
+    .form-btn:hover { background: var(--blue-dark); box-shadow: 0 6px 20px var(--blue-glow); }
+    .form-hint {
+      font-size: 12px; font-weight: 500;
+      color: var(--gray-dark); /* was --gray */
+      text-align: center;
+    }
+    .form-msg {
+      display: none; font-size: 13px; font-weight: 600;
+      padding: 10px 14px; border-radius: 10px;
+    }
+    .form-msg.ok  { display: block; color: var(--mint-dark); background: var(--mint-light); border: 1px solid rgba(16,185,129,0.3); }
+    .form-msg.err { display: block; color: #b91c1c; background: #fef2f2; border: 1px solid rgba(185,28,28,0.2); }
+
+    /* ── STAT CARDS BELOW HERO ── */
+    .hero-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; padding: 28px 20px 0;
+      max-width: 480px; margin: 0 auto;
+    }
+    .hstat {
+      background: var(--white);
+      border: 1px solid var(--gray-border);
+      border-radius: 14px; padding: 18px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      text-align: center;
+    }
+    .hstat-v {
+      font-size: 28px; font-weight: 800;
+      color: var(--off-black); letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px;
+    }
+    .hstat-v .b { color: var(--blue); }
+    .hstat-v .m { color: var(--mint-dark); }
+    .hstat-l { font-size: 11px; font-weight: 600; color: var(--gray-dark); letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* ── TICKER ── */
+    .ticker-bar {
+      margin-top: 28px;
+      background: var(--white);
+      border-top: 1px solid var(--gray-border);
+      border-bottom: 1px solid var(--gray-border);
+      padding: 12px 0; overflow: hidden;
+    }
+    .ticker-track { display: flex; animation: tickerScroll 26s linear infinite; width: max-content; }
+    @keyframes tickerScroll { from{transform:translateX(0);}to{transform:translateX(-50%);} }
+    .tick {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; padding: 0 18px; white-space: nowrap;
+      color: var(--gray-dark); display: flex; align-items: center; gap: 5px;
+    }
+    .tick .up { color: var(--mint-dark); font-weight: 500; }
+    .tick .dn { color: #dc2626; font-weight: 500; }
+    .tick .sep { opacity: 0.3; }
+
+    /* ── SECTION SHARED ── */
+    .section { padding: 60px 20px; }
+    .section-alt { background: var(--white); }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--blue); background: var(--blue-light); border: 1px solid rgba(37,99,235,0.22);
+      border-radius: 100px; padding: 4px 12px; margin-bottom: 12px;
+    }
+    .chip.mint { color: var(--mint-dark); background: var(--mint-light); border-color: rgba(16,185,129,0.25); }
+    .chip-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    .sec-h {
+      font-size: clamp(26px, 6vw, 40px);
+      font-weight: 800; letter-spacing: -0.025em; line-height: 1.1;
+      color: var(--off-black); margin-bottom: 10px;
+    }
+    .sec-h span { color: var(--blue); }
+    .sec-p {
+      font-family: 'Lora', serif; font-size: 16px; font-style: italic;
+      color: var(--gray-dark); /* boosted */
+      line-height: 1.7; margin-bottom: 36px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps-list { display: flex; flex-direction: column; gap: 12px; }
+    .step-card {
+      background: var(--white); border: 1px solid var(--gray-border);
+      border-radius: 16px; padding: 22px;
+      display: flex; gap: 16px; align-items: flex-start;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .section-alt .step-card { background: var(--bg); }
+    .step-card:hover { border-color: rgba(37,99,235,0.3); box-shadow: 0 4px 16px rgba(37,99,235,0.08); }
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500;
+      color: var(--white); background: var(--blue);
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .step-body h3 { font-size: 15px; font-weight: 700; color: var(--off-black); margin-bottom: 5px; }
+    .step-body p  { font-size: 13px; color: var(--gray-dark); line-height: 1.65; }
+
+    /* ── FEATURES ── */
+    .feat-grid { display: flex; flex-direction: column; gap: 12px; }
+    .feat-card {
+      background: var(--white); border: 1px solid var(--gray-border);
+      border-radius: 16px; padding: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+      border-radius: 0 0 2px 2px; opacity: 0; transition: opacity 0.25s;
+    }
+    .feat-card.mc::before { background: linear-gradient(90deg, var(--mint), transparent); }
+    .feat-card:hover { border-color: rgba(37,99,235,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.09); }
+    .feat-card.mc:hover { border-color: rgba(16,185,129,0.3); box-shadow: 0 8px 24px rgba(16,185,129,0.09); }
+    .feat-card:hover::before { opacity: 1; }
+
+    .feat-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--blue-light); border: 1px solid rgba(37,99,235,0.15);
+      display: grid; place-items: center; font-size: 20px;
+      margin-bottom: 14px;
+    }
+    .feat-card.mc .feat-icon { background: var(--mint-light); border-color: rgba(16,185,129,0.2); }
+    .feat-card h3 { font-size: 16px; font-weight: 700; color: var(--off-black); margin-bottom: 7px; }
+    .feat-card p  { font-size: 13px; color: var(--gray-dark); line-height: 1.65; }
+
+    /* ── BROKERAGES ── */
+    .brok-card-outer {
+      background: var(--off-black);
+      border-radius: 20px; overflow: hidden;
+      position: relative;
+    }
+    .brok-card-outer::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--mint));
+    }
+    .brok-header {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .brok-header h2 { font-size: 20px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
+    .brok-header p  { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; font-weight: 500; }
+    .brok-list { display: flex; flex-direction: column; }
+    .brok-item {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.2s;
+    }
+    .brok-item:last-child { border-bottom: none; }
+    .brok-item:hover { background: rgba(255,255,255,0.04); }
+    .brok-name { font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
+    .brok-sub  { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; font-weight: 500; }
+    .brok-live {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; color: var(--mint);
+      background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 100px; padding: 4px 12px; white-space: nowrap;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--mint);
+      box-shadow: 0 0 6px var(--mint-glow);
+      animation: livePulse 2s ease-in-out infinite;
+    }
+    @keyframes livePulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+    /* ── STATS RIBBON ── */
+    .stats-ribbon { background: var(--blue); padding: 40px 20px; }
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: rgba(255,255,255,0.2);
+      max-width: 480px; margin: 0 auto;
+      border-radius: 16px; overflow: hidden;
+    }
+    .stat-block {
+      background: var(--blue); padding: 28px 20px; text-align: center;
+    }
+    .stat-v {
+      font-size: 36px; font-weight: 800; color: var(--white);
+      letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px;
+    }
+    .stat-v .m { color: #6ee7b7; } /* lighter mint for contrast on blue */
+    .stat-l { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.75); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ── CTA ── */
+    .cta-card {
+      background: var(--white); border: 1px solid var(--gray-border);
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+      position: relative;
+    }
+    .cta-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--mint));
+    }
+    .cta-top {
+      padding: 32px 24px 24px;
+      background: linear-gradient(160deg, #eff6ff 0%, #f0fdf9 100%);
+      border-bottom: 1px solid var(--gray-border);
+    }
+    .cta-top h2 {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 800; letter-spacing: -0.025em; color: var(--off-black);
+      margin-bottom: 10px; line-height: 1.15;
+    }
+    .cta-top h2 em { font-style: normal; color: var(--blue); }
+    .cta-top p { font-family: 'Lora', serif; font-size: 15px; font-style: italic; color: var(--gray-dark); line-height: 1.65; margin-bottom: 20px; }
+    .perks { display: flex; flex-direction: column; gap: 9px; }
+    .perk { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 500; color: var(--off-black); }
+    .perk-check {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      background: var(--mint); display: grid; place-items: center;
+    }
+    .perk-check svg { width: 10px; height: 10px; }
+
+    .cta-bottom { padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .cta-bottom h3 { font-size: 17px; font-weight: 700; color: var(--off-black); margin-bottom: 2px; }
+    .cta-bottom h3 span { color: var(--blue); }
+    .cta-field {
+      width: 100%; padding: 13px 16px;
+      background: var(--bg); border: 1.5px solid var(--gray-border);
+      border-radius: 10px; color: var(--off-black);
+      font-family: 'Manrope', sans-serif; font-size: 14px; outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .cta-field::placeholder { color: var(--gray); }
+    .cta-field:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+    .cta-submit {
+      width: 100%; padding: 14px;
+      background: var(--blue); color: var(--white);
+      border: none; border-radius: 10px;
+      font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 800;
+      cursor: pointer; transition: background 0.2s, box-shadow 0.2s;
+    }
+    .cta-submit:hover { background: var(--blue-dark); box-shadow: 0 6px 20px var(--blue-glow); }
+    .cta-fine { font-size: 11px; color: var(--gray-dark); text-align: center; font-weight: 500; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--off-black);
+      padding: 40px 20px 32px;
+    }
+    .foot-top {
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 24px;
+    }
+    .foot-brand { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; }
+    .foot-brand img { height: 28px; width: 28px; }
+    .foot-wm { font-size: 17px; font-weight: 800; color: var(--white); }
+    .foot-wm span { color: var(--blue); }
+    .foot-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; font-weight: 400; }
+    .foot-links {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px; margin-top: 24px;
+    }
+    .foot-links a {
+      font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55);
+      text-decoration: none; padding: 6px 0;
+      transition: color 0.2s;
+    }
+    .foot-links a:hover { color: var(--white); }
+    .foot-bottom { display: flex; align-items: center; justify-content: space-between; }
+    .foot-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); }
+    .foot-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--mint); background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.22);
+      border-radius: 100px; padding: 4px 10px;
+    }
+
+    /* ── REVEAL ── */
+    .rv {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .rv.in { opacity: 1; transform: translateY(0); }
+
+    /* ── DESKTOP (≥ 768px) ── */
+    @media (min-width: 768px) {
+      nav { padding: 0 40px; height: 68px; }
+      .nav-logo img { height: 34px; width: 34px; }
+      .nav-wordmark { font-size: 17px; }
+      .nav-links {
+        display: flex; align-items: center; gap: 4px;
+      }
+      .nav-link {
+        font-size: 13px; font-weight: 500; color: var(--gray-dark);
+        text-decoration: none; padding: 7px 14px; border-radius: 8px;
+        transition: color 0.2s, background 0.2s;
+      }
+      .nav-link:hover { color: var(--off-black); background: var(--gray-bg); }
+      .nav-actions { display: flex; align-items: center; gap: 10px; }
+      .nav-ghost {
+        font-size: 13px; font-weight: 600; color: var(--blue);
+        background: none; border: 1.5px solid var(--blue);
+        border-radius: 10px; padding: 8px 18px; cursor: pointer;
+        transition: background 0.2s;
+      }
+      .nav-ghost:hover { background: var(--blue-light); }
+      /* replace single cta button with two on desktop */
+      .nav-cta { display: none; }
+
+      .hero { padding: 110px 40px 60px; }
+      .hero-inner { max-width: 1160px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+      .hero-stats { display: none; } /* stats shown in card on desktop */
+
+      h1 { font-size: clamp(42px, 5vw, 64px); }
+      .hero-sub { font-size: 18px; }
+      .form-wrap { flex-direction: row; gap: 0; }
+      .form-input { border-radius: 12px 0 0 12px; border-right: none; }
+      .form-btn   { border-radius: 0 12px 12px 0; width: auto; padding: 0 24px; }
+
+      /* hero right — app card */
+      .hero-card { display: block !important; }
+
+      .section { padding: 80px 40px; }
+      .section-inner { max-width: 1160px; margin: 0 auto; }
+
+      .steps-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .feat-grid  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+      .brok-list { flex-direction: row; }
+      .brok-item { flex-direction: column; align-items: flex-start; border-bottom: none; border-right: 1px solid rgba(255,255,255,0.07); flex: 1; }
+      .brok-item:last-child { border-right: none; }
+
+      .stats-ribbon { padding: 56px 40px; }
+      .stats-grid { grid-template-columns: repeat(4, 1fr); max-width: 900px; }
+
+      .cta-card { display: grid; grid-template-columns: 1fr 1fr; }
+      .cta-top { border-bottom: none; border-right: 1px solid var(--gray-border); padding: 48px 40px; }
+      .cta-bottom { padding: 48px 40px; justify-content: center; }
+
+      footer { padding: 56px 40px 40px; }
+      .foot-top { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; }
+      .foot-links { grid-template-columns: repeat(2, auto); justify-content: start; column-gap: 32px; margin-top: 0; }
+    }
+
+    @media (min-width: 1024px) {
+      nav { padding: 0 52px; }
+      .hero { padding: 120px 52px 80px; }
+      .section { padding: 100px 52px; }
+      footer { padding: 60px 52px 44px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progressBar"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <img src="logo.png" alt="Twin Trades"/>
+      <div class="nav-wordmark">Twin<span>Trades</span></div>
+    </div>
+    <!-- desktop only -->
+    <div class="nav-links">
+      <a class="nav-link" href="#how">How It Works</a>
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#brokerages">Brokerages</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-ghost" onclick="document.getElementById('ctaEmail').scrollIntoView({behavior:'smooth'})">Sign Up</button>
+      <button class="nav-solid" style="font-size:13px;font-weight:700;color:#fff;background:var(--blue);border:none;border-radius:10px;padding:9px 20px;cursor:pointer;" onclick="document.getElementById('ctaEmail').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
+    </div>
+    <!-- mobile only -->
+    <button class="nav-cta" onclick="document.getElementById('ctaEmail').scrollIntoView({behavior:'smooth'})">Join Waitlist</button>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-shape-1"></div>
+      <div class="hero-shape-2"></div>
+    </div>
+
+    <!-- mobile layout: single column -->
+    <div class="hero-inner">
+      <!-- LEFT / TOP -->
+      <div class="hero-left">
+        <div class="hero-badge rv">
+          <div class="badge-pip">
+            <svg viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="2.5" fill="white"/></svg>
+          </div>
+          <span>iOS App · Now Taking Waitlist</span>
+        </div>
+
+        <h1 class="rv">
+          Invest like<br/>
+          an <span class="hl-blue">insider.</span><br/>
+          Profit like a<br/>
+          <span class="hl-mint">politician.</span>
+        </h1>
+
+        <p class="hero-sub rv">
+          Mirror the portfolios of elite traders and politicians automatically.
+          Connect your brokerage once — Twin Trades handles every trade for you.
+        </p>
+
+        <div class="form-wrap rv">
+          <input class="form-input" type="email" id="heroEmail" placeholder="Enter your email"/>
+          <button class="form-btn" onclick="submitEmail('heroEmail','heroMsg')">Get Access</button>
+        </div>
+        <div class="form-msg" id="heroMsg" style="margin-top:10px;"></div>
+        <p class="form-hint" style="margin-top:10px;">Free to join · No credit card · One email at launch</p>
+      </div>
+
+      <!-- RIGHT — app card, hidden on mobile via CSS -->
+      <div class="hero-card" style="display:none;">
+        <div style="background:var(--white);border:1px solid var(--gray-border);border-radius:22px;padding:28px;box-shadow:0 16px 48px rgba(0,0,0,0.09);position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--mint));border-radius:22px 22px 0 0;"></div>
+
+          <!-- logo row -->
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--gray-border);">
+            <img src="logo.png" style="width:44px;height:44px;object-fit:contain;" alt=""/>
+            <div>
+              <div style="font-size:15px;font-weight:800;color:var(--off-black);">Twin<span style="color:var(--blue);">Trades</span></div>
+              <div style="font-size:11px;font-weight:600;color:var(--gray-dark);margin-top:2px;">Copy-Trading · iOS</div>
+            </div>
+          </div>
+
+          <!-- balance -->
+          <div style="margin-bottom:14px;">
+            <div style="font-size:11px;font-weight:700;color:var(--gray-dark);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:5px;">Portfolio Value</div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+              <div style="font-size:34px;font-weight:800;color:var(--off-black);letter-spacing:-0.03em;line-height:1;">$24,812</div>
+              <div style="background:var(--mint-light);border:1px solid rgba(16,185,129,0.25);border-radius:100px;padding:5px 12px;font-size:13px;font-weight:700;color:var(--mint-dark);">▲ +5.1%</div>
+            </div>
+          </div>
+
+          <!-- mini chart -->
+          <div style="width:100%;height:72px;margin-bottom:18px;">
+            <svg viewBox="0 0 320 72" fill="none" style="width:100%;height:100%;">
+              <defs>
+                <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2563EB" stop-opacity="0.12"/>
+                  <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0 62 C28 58 52 52 78 44 C102 37 122 42 148 32 C170 24 196 28 222 18 C244 10 272 13 300 5 L320 3" stroke="#2563EB" stroke-width="2" fill="none"/>
+              <path d="M0 62 C28 58 52 52 78 44 C102 37 122 42 148 32 C170 24 196 28 222 18 C244 10 272 13 300 5 L320 3 L320 72 L0 72 Z" fill="url(#cg)"/>
+            </svg>
+          </div>
+
+          <!-- traders -->
+          <div style="font-size:10px;font-weight:700;color:var(--gray-dark);letter-spacing:0.09em;text-transform:uppercase;margin-bottom:9px;">Following</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--gray-border);">
+              <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563EB,#10B981);flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;color:var(--off-black);">@senator_alpha</div>
+                <div style="font-size:11px;color:var(--gray-dark);font-weight:500;">+42.3% YTD</div>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:var(--mint-dark);background:var(--mint-light);border:1px solid rgba(16,185,129,0.22);border-radius:8px;padding:4px 10px;">Copying</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--gray-border);">
+              <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#1d4ed8,#6366f1);flex-shrink:0;"></div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;color:var(--off-black);">@insider_pro</div>
+                <div style="font-size:11px;color:var(--gray-dark);font-weight:500;">+28.7% YTD</div>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:var(--mint-dark);background:var(--mint-light);border:1px solid rgba(16,185,129,0.22);border-radius:8px;padding:4px 10px;">Copying</div>
+            </div>
+          </div>
+
+          <!-- stat chips -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-top:16px;">
+            <div style="text-align:center;padding:12px 4px;background:var(--bg);border-radius:10px;border:1px solid var(--gray-border);">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);">3+</div>
+              <div style="font-size:9px;font-weight:600;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.04em;">Brokers</div>
+            </div>
+            <div style="text-align:center;padding:12px 4px;background:var(--bg);border-radius:10px;border:1px solid var(--gray-border);">
+              <div style="font-size:18px;font-weight:800;color:var(--mint-dark);">0s</div>
+              <div style="font-size:9px;font-weight:600;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.04em;">Manual</div>
+            </div>
+            <div style="text-align:center;padding:12px 4px;background:var(--bg);border-radius:10px;border:1px solid var(--gray-border);">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);">2FA</div>
+              <div style="font-size:9px;font-weight:600;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.04em;">Secure</div>
+            </div>
+            <div style="text-align:center;padding:12px 4px;background:var(--bg);border-radius:10px;border:1px solid var(--gray-border);">
+              <div style="font-size:18px;font-weight:800;color:var(--mint-dark);">24/7</div>
+              <div style="font-size:9px;font-weight:600;color:var(--gray-dark);text-transform:uppercase;letter-spacing:0.04em;">Sync</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE STATS (only visible on mobile) -->
+  <div class="hero-stats rv">
+    <div class="hstat">
+      <div class="hstat-v"><span class="b">3</span>+</div>
+      <div class="hstat-l">Brokerages</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-v"><span class="m">0</span>s</div>
+      <div class="hstat-l">Manual work</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-v"><span class="b">2</span>FA</div>
+      <div class="hstat-l">Security</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-v"><span class="m">24</span>/7</div>
+      <div class="hstat-l">Live sync</div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-bar">
+    <div class="ticker-track">
+      <span class="tick">AAPL <span class="up">+2.4%</span><span class="sep"> · </span></span>
+      <span class="tick">NVDA <span class="up">+5.1%</span><span class="sep"> · </span></span>
+      <span class="tick">TSLA <span class="dn">−1.2%</span><span class="sep"> · </span></span>
+      <span class="tick">MSFT <span class="up">+0.8%</span><span class="sep"> · </span></span>
+      <span class="tick">META <span class="up">+3.6%</span><span class="sep"> · </span></span>
+      <span class="tick">GOOG <span class="up">+1.1%</span><span class="sep"> · </span></span>
+      <span class="tick">AMZN <span class="dn">−0.4%</span><span class="sep"> · </span></span>
+      <span class="tick">JPM <span class="up">+1.8%</span><span class="sep"> · </span></span>
+      <span class="tick">AAPL <span class="up">+2.4%</span><span class="sep"> · </span></span>
+      <span class="tick">NVDA <span class="up">+5.1%</span><span class="sep"> · </span></span>
+      <span class="tick">TSLA <span class="dn">−1.2%</span><span class="sep"> · </span></span>
+      <span class="tick">MSFT <span class="up">+0.8%</span><span class="sep"> · </span></span>
+      <span class="tick">META <span class="up">+3.6%</span><span class="sep"> · </span></span>
+      <span class="tick">GOOG <span class="up">+1.1%</span><span class="sep"> · </span></span>
+      <span class="tick">AMZN <span class="dn">−0.4%</span><span class="sep"> · </span></span>
+      <span class="tick">JPM <span class="up">+1.8%</span><span class="sep"> · </span></span>
+    </div>
+  </div>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <section class="section section-alt" id="how">
+    <div class="section-inner">
+      <div class="rv">
+        <div class="chip"><span class="chip-dot"></span>Process</div>
+        <h2 class="sec-h">Four steps to <span>hands-free</span> investing</h2>
+        <p class="sec-p">Set it up once and never think about it again — from brokerage connection to fully automated trades.</p>
+      </div>
+      <div class="steps-list rv">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h3>Connect Your Brokerage</h3>
+            <p>Link Webull, Alpaca, or Charles Schwab via secure OAuth. Credentials are AES-128 encrypted and never stored in plain text.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h3>Choose Who to Follow</h3>
+            <p>Browse politicians, insiders, and verified traders ranked by returns and risk. Subscribe to those who match your strategy.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h3>Trades Mirror Instantly</h3>
+            <p>When a followed trader places a position, Twin Trades rebalances your portfolio proportionally and automatically.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h3>Track Your Returns</h3>
+            <p>Monitor live P&L, full trade history, and receive monthly performance reports delivered to your inbox.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES ═══ -->
+  <section class="section" id="features">
+    <div class="section-inner">
+      <div class="rv">
+        <div class="chip"><span class="chip-dot"></span>Platform</div>
+        <h2 class="sec-h">The edge insiders <span>already have</span></h2>
+        <p class="sec-p">Everything you need to invest at an elite level — without lifting a finger.</p>
+      </div>
+      <div class="feat-grid rv">
+        <div class="feat-card">
+          <div class="feat-icon">🏛️</div>
+          <h3>Political Portfolio Tracking</h3>
+          <p>Politicians must disclose every trade by law. We monitor filings and mirror their positions the moment they're published.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🔄</div>
+          <h3>Zero Manual Trading</h3>
+          <p>Every rebalance is executed automatically. Subscribe once and the platform handles it indefinitely — no action needed.</p>
+        </div>
+        <div class="feat-card mc">
+          <div class="feat-icon">📡</div>
+          <h3>Real-Time Portfolio Sync</h3>
+          <p>Portfolio syncs run every 30 minutes. Brokerage tokens refresh every 6 hours. You're always up to date.</p>
+        </div>
+        <div class="feat-card mc">
+          <div class="feat-icon">🔐</div>
+          <h3>Bank-Grade Security</h3>
+          <p>JWT auth with TOTP & SMS two-factor authentication. All credentials encrypted with AES-128 at rest.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📱</div>
+          <h3>Instant Push Notifications</h3>
+          <p>Apple APNs alerts fire the moment a trade is mirrored to your account. Nothing happens without you knowing.</p>
+        </div>
+        <div class="feat-card mc">
+          <div class="feat-icon">📈</div>
+          <h3>Monthly Performance Reports</h3>
+          <p>A detailed monthly breakdown — every trade, market impact, and your exact P&L — delivered to your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ BROKERAGES ═══ -->
+  <section class="section section-alt" id="brokerages">
+    <div class="section-inner">
+      <div class="rv">
+        <div class="chip mint"><span class="chip-dot"></span>Integrations</div>
+        <h2 class="sec-h">Supported <span style="color:var(--mint-dark);">brokerages</span> at launch</h2>
+        <p class="sec-p" style="margin-bottom:28px;">More brokerages will be added post-launch as the platform grows.</p>
+      </div>
+      <div class="brok-card-outer rv">
+        <div class="brok-header">
+          <h2>Connect your brokerage</h2>
+          <p>Secure OAuth connection · More coming post-launch</p>
+        </div>
+        <div class="brok-list">
+          <div class="brok-item">
+            <div>
+              <div class="brok-name">Webull</div>
+              <div class="brok-sub">Commission-free trading</div>
+            </div>
+            <div class="brok-live"><div class="live-dot"></div>Live at launch</div>
+          </div>
+          <div class="brok-item">
+            <div>
+              <div class="brok-name">Alpaca</div>
+              <div class="brok-sub">API-first brokerage</div>
+            </div>
+            <div class="brok-live"><div class="live-dot"></div>Live at launch</div>
+          </div>
+          <div class="brok-item">
+            <div>
+              <div class="brok-name">Charles Schwab</div>
+              <div class="brok-sub">Full-service brokerage</div>
+            </div>
+            <div class="brok-live"><div class="live-dot"></div>Live at launch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ STATS ═══ -->
+  <div class="stats-ribbon rv">
+    <div class="stats-grid">
+      <div class="stat-block">
+        <div class="stat-v">3<span class="m">+</span></div>
+        <div class="stat-l">Brokerages</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-v"><span class="m">0</span>s</div>
+        <div class="stat-l">Manual work</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-v">2FA</div>
+        <div class="stat-l">Security</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-v">24<span class="m">/7</span></div>
+        <div class="stat-l">Monitoring</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="section" id="cta">
+    <div class="section-inner">
+      <div class="cta-card rv">
+        <div class="cta-top">
+          <div class="chip mint" style="margin-bottom:16px;"><span class="chip-dot"></span>Early Access Open</div>
+          <h2>Join the waitlist <em>today.</em></h2>
+          <p>Be first in line when Twin Trades opens its doors. Free to join, no commitment required.</p>
+          <div class="perks">
+            <div class="perk">
+              <div class="perk-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Priority access at launch
+            </div>
+            <div class="perk">
+              <div class="perk-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              No credit card required
+            </div>
+            <div class="perk">
+              <div class="perk-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              One email — when we ship
+            </div>
+            <div class="perk">
+              <div class="perk-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              Unsubscribe anytime
+            </div>
+          </div>
+        </div>
+        <div class="cta-bottom">
+          <h3>Get notified at <span>launch</span></h3>
+          <input class="cta-field" type="email" id="ctaEmail" placeholder="Enter your email address"/>
+          <button class="cta-submit" onclick="submitEmail('ctaEmail','ctaMsg')">Get Early Access →</button>
+          <div class="form-msg" id="ctaMsg"></div>
+          <p class="cta-fine">Invest Like an Insider. Profit Like a Politician.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">
+          <img src="logo.png" alt="Twin Trades"/>
+          <div class="foot-wm">Twin<span>Trades</span></div>
+        </div>
+        <p class="foot-desc">An iOS copy-trading platform that mirrors the portfolios of politicians and elite traders automatically.</p>
+        <div class="foot-links">
+          <a href="#how">How It Works</a>
+          <a href="#features">Features</a>
+          <a href="#brokerages">Brokerages</a>
+          <a href="#cta">Join Waitlist</a>
+          <a href="https://github.com/JonathanEDressel/Twin-Trades">GitHub</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:flex-end;padding-top:24px;">
+        <img src="logo.png" style="width:64px;height:64px;object-fit:contain;opacity:0.15;" alt=""/>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© 2026 Twin Trades. All rights reserved.</p>
+      <div class="foot-badge">iOS · Coming Soon</div>
+    </div>
+  </footer>
+
+  <script>
+    // progress bar
+    window.addEventListener('scroll', () => {
+      const el = document.getElementById('progressBar');
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      el.style.width = Math.min(pct, 100) + '%';
+    });
+
+    // scroll reveal
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+    // email submit
+    async function submitEmail(inputId, msgId) {
+      const input = document.getElementById(inputId);
+      const msgEl = document.getElementById(msgId);
+      const email = input.value.trim();
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        show(msgEl, 'Please enter a valid email address.', 'err'); return;
+      }
+
+      const allBtns = document.querySelectorAll(`button[onclick*="${inputId}"]`);
+      allBtns.forEach(b => { b.textContent = 'Sending…'; b.disabled = true; });
+
+      try {
+        const SID = 'YOUR_SERVICE_ID', TID = 'YOUR_TEMPLATE_ID', PK = 'YOUR_PUBLIC_KEY';
+        if (SID === 'YOUR_SERVICE_ID') throw new Error('no svc');
+        const r = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ service_id: SID, template_id: TID, user_id: PK,
+            template_params: { to_email: 'jonathanedressel@gmail.com', from_email: email,
+              message: 'New Twin Trades waitlist signup: ' + email }})
+        });
+        if (!r.ok) throw new Error();
+        show(msgEl, "✓ You're on the list! We'll be in touch at launch.", 'ok');
+        input.value = '';
+      } catch {
+        const s = encodeURIComponent('Twin Trades Waitlist: ' + email);
+        const b = encodeURIComponent('New signup: ' + email);
+        window.location.href = `mailto:jonathanedressel@gmail.com?subject=${s}&body=${b}`;
+        show(msgEl, '✓ Opening your mail client to complete signup.', 'ok');
+        input.value = '';
+      } finally {
+        allBtns.forEach(b => { b.textContent = 'Get Early Access →'; b.disabled = false; });
+      }
+    }
+
+    function show(el, text, cls) {
+      el.textContent = text; el.className = 'form-msg ' + cls;
+      setTimeout(() => { el.className = 'form-msg'; }, 7000);
+    }
+  </script>
+</body>
+</html>
