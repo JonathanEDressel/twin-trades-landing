@@ -673,7 +673,7 @@
           <button class="form-btn" type="submit">Get Access</button>
         </form>
         <div class="form-msg" id="heroMsg" style="margin-top:10px;"></div>
-        <div class="waitlist-badge" style="display:none;margin-top:14px;"></div>
+        <div class="waitlist-badge" style="margin-top:14px;"><span class="wb-dot"></span><span class="wb-num">Early access</span> open — be first in line</div>
         <p class="form-hint" style="margin-top:10px;">Free to join · No credit card · One email at launch</p>
       </div>
 
@@ -1114,7 +1114,7 @@
           <p style="display:none"><input name="bot-field"/></p>
           <h3>Get notified at <span>launch</span></h3>
           <input class="cta-field" type="email" name="email" placeholder="Enter your email address" required/>
-          <div class="waitlist-badge" style="display:none;"></div>
+          <div class="waitlist-badge" style="margin-bottom:12px;"><span class="wb-dot"></span><span class="wb-num">Early access</span> open — be first in line</div>
           <button class="cta-submit" type="submit">Get Early Access →</button>
           <div class="form-msg" id="ctaMsg"></div>
           <p class="cta-fine">Invest Like an Insider. Profit Like a Politician.</p>
@@ -1234,7 +1234,6 @@
         const label = count === 1 ? 'person already signed up' : 'people already signed up';
         document.querySelectorAll('.waitlist-badge').forEach(el => {
           el.innerHTML = `<span class="wb-dot"></span><span class="wb-num">${count.toLocaleString()}</span>${label}`;
-          el.style.display = '';
         });
       } catch { /* silently skip if function not deployed */ }
     }());
