@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Twin Trades — Invest Like an Insider.</title>
+  <title>TwinTrades — Invest Like an Insider.</title>
   <link rel="icon" type="image/png" href="logo.png"/>
   <link rel="apple-touch-icon" href="logo.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -67,11 +67,12 @@
     .nav-wordmark span { color: var(--blue); }
 
     .nav-links { display: none; } /* hidden on mobile */
+    .nav-actions { display: none; } /* hidden on mobile — desktop shows two buttons */
 
     .nav-cta {
       font-size: 13px; font-weight: 700; color: var(--white);
       background: var(--blue); border: none;
-      border-radius: 8px; padding: 8px 16px; cursor: pointer;
+      border-radius: 10px; padding: 10px 18px; cursor: pointer;
       transition: background 0.2s;
       white-space: nowrap;
     }
@@ -282,6 +283,60 @@
     .feat-card h3 { font-size: 16px; font-weight: 700; color: var(--off-black); margin-bottom: 7px; }
     .feat-card p  { font-size: 13px; color: var(--gray-dark); line-height: 1.65; }
 
+    /* ── CREATOR PROGRAM ── */
+    .creator-wrap {
+      background: var(--off-black);
+      border-radius: 20px; overflow: hidden; position: relative;
+    }
+    .creator-wrap::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--mint), var(--blue));
+    }
+    .creator-body { display: flex; flex-direction: column; }
+    .creator-left {
+      padding: 32px 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .creator-right { padding: 32px 28px; }
+    .creator-step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 22px; }
+    .creator-step:last-child { margin-bottom: 0; }
+    .creator-step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; font-weight: 500; color: var(--mint);
+      background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25);
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center; flex-shrink: 0; margin-top: 1px;
+    }
+    .creator-step-body h4 { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .creator-step-body p  { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+    .earn-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 20px;
+    }
+    .earn-profile {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 18px; padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .earn-avatar {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--blue), var(--mint));
+      display: grid; place-items: center; font-size: 20px;
+    }
+    .earn-name { font-size: 15px; font-weight: 700; color: var(--white); }
+    .earn-tag  { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 500; margin-top: 2px; }
+    .earn-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .earn-stat  { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 12px; }
+    .earn-stat-v {
+      font-size: 20px; font-weight: 800; color: var(--white);
+      letter-spacing: -0.02em; line-height: 1; margin-bottom: 3px;
+    }
+    .earn-stat-v .m { color: var(--mint); }
+    .earn-stat-l { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.06em; }
+    .earn-bar-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+    .earn-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+    .earn-bar-fill  { height: 100%; width: 68%; border-radius: 100px; background: linear-gradient(90deg, var(--mint), var(--blue)); }
+
     /* ── BROKERAGES ── */
     .brok-card-outer {
       background: var(--off-black);
@@ -307,12 +362,26 @@
     }
     .brok-item:last-child { border-bottom: none; }
     .brok-item:hover { background: rgba(255,255,255,0.04); }
-    .brok-name { font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
+    .brok-item-left { display: flex; align-items: center; gap: 14px; }
+    .brok-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900; color: #fff;
+      letter-spacing: -0.03em; flex-shrink: 0;
+    }
+    .brok-icon img { width: 26px; height: 26px; display: block; }
+    .brok-name { font-size: 17px; font-weight: 800; color: var(--white); letter-spacing: -0.02em; }
     .brok-sub  { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; font-weight: 500; }
     .brok-live {
       display: flex; align-items: center; gap: 6px;
       font-size: 11px; font-weight: 700; color: var(--mint);
       background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 100px; padding: 4px 12px; white-space: nowrap;
+    }
+    .brok-soon {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
       border-radius: 100px; padding: 4px 12px; white-space: nowrap;
     }
     .live-dot {
@@ -502,9 +571,10 @@
       .steps-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
       .feat-grid  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-      .brok-list { flex-direction: row; }
-      .brok-item { flex-direction: column; align-items: flex-start; border-bottom: none; border-right: 1px solid rgba(255,255,255,0.07); flex: 1; }
-      .brok-item:last-child { border-right: none; }
+      .brok-list { display: grid; grid-template-columns: 1fr 1fr; }
+      .brok-item { border-bottom: 1px solid rgba(255,255,255,0.07); border-right: none; flex: unset; flex-direction: row; align-items: center; }
+      .brok-item:nth-child(odd):last-child,
+      .brok-item:nth-last-child(-n+2) { border-bottom: none; }
 
       .stats-ribbon { padding: 56px 40px; }
       .stats-grid { grid-template-columns: repeat(4, 1fr); max-width: 900px; }
@@ -512,6 +582,10 @@
       .cta-card { display: grid; grid-template-columns: 1fr 1fr; }
       .cta-top { border-bottom: none; border-right: 1px solid var(--gray-border); padding: 48px 40px; }
       .cta-bottom { padding: 48px 40px; justify-content: center; }
+
+      .creator-body { flex-direction: row; }
+      .creator-left { flex: 1; border-bottom: none; border-right: 1px solid rgba(255,255,255,0.08); }
+      .creator-right { flex: 1; }
 
       footer { padding: 56px 40px 40px; }
       .foot-top { grid-template-columns: 2fr 1fr 1fr; gap: 60px; }
@@ -537,7 +611,7 @@
   <!-- NAV -->
   <nav>
     <div class="nav-logo">
-      <img src="logo.png" alt="Twin Trades"/>
+      <img src="logo.png" alt="TwinTrades"/>
       <div class="nav-wordmark">Twin<span>Trades</span></div>
     </div>
     <!-- desktop only -->
@@ -545,6 +619,7 @@
       <a class="nav-link" href="#how">How It Works</a>
       <a class="nav-link" href="#features">Features</a>
       <a class="nav-link" href="#brokerages">Brokerages</a>
+      <a class="nav-link" href="#earn">Creator Program</a>
     </div>
     <div class="nav-actions">
       <button class="nav-ghost" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Sign Up</button>
@@ -556,7 +631,7 @@
 
   <!-- ═══ LOGO HERO ═══ -->
   <div style="margin-top: 80px; padding: 56px 20px 0; display:flex; flex-direction:column; align-items:center; background:var(--bg);">
-    <img src="logo.png" alt="Twin Trades" class="rv" style="width: clamp(280px, 76vw, 520px); height: clamp(280px, 76vw, 520px); border-radius: clamp(56px, 12vw, 96px); object-fit:contain; background:var(--white); padding: clamp(36px, 8vw, 72px); box-shadow: 0 16px 64px rgba(37,99,235,0.16), 0 4px 16px rgba(0,0,0,0.08); border: 1px solid var(--gray-border);"/>
+    <img src="logo.png" alt="TwinTrades" class="rv" style="width: clamp(280px, 76vw, 520px); height: clamp(280px, 76vw, 520px); border-radius: clamp(56px, 12vw, 96px); object-fit:contain; background:var(--white); padding: clamp(36px, 8vw, 72px); box-shadow: 0 16px 64px rgba(37,99,235,0.16), 0 4px 16px rgba(0,0,0,0.08); border: 1px solid var(--gray-border);"/>
     <div class="rv" style="margin-top:20px; font-size: clamp(28px, 7vw, 44px); font-weight:800; letter-spacing:-0.03em; color:var(--off-black);">Twin<span style="color:var(--blue);">Trades</span></div>
     <div class="rv" style="margin-top:6px; font-size:14px; font-weight:600; color:var(--gray-dark);">Copy-Trading · iOS App</div>
   </div>
@@ -588,7 +663,7 @@
 
         <p class="hero-sub rv">
           Mirror the portfolios of elite traders and politicians automatically.
-          Connect your brokerage once — Twin Trades handles every trade for you.
+          Connect your brokerage once — TwinTrades handles every trade for you.
         </p>
 
         <form class="form-wrap rv" name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleSubmit(event,'heroMsg')">
@@ -687,7 +762,7 @@
   <!-- MOBILE STATS (only visible on mobile) -->
   <div class="hero-stats rv">
     <div class="hstat">
-      <div class="hstat-v"><span class="b">3</span>+</div>
+      <div class="hstat-v"><span class="b">10</span>+</div>
       <div class="hstat-l">Brokerages</div>
     </div>
     <div class="hstat">
@@ -799,7 +874,7 @@
           <div class="step-num">03</div>
           <div class="step-body">
             <h3>Trades Mirror Instantly</h3>
-            <p>When a followed trader places a position, Twin Trades rebalances your portfolio proportionally and automatically.</p>
+            <p>When a followed trader places a position, TwinTrades rebalances your portfolio proportionally and automatically.</p>
           </div>
         </div>
         <div class="step-card">
@@ -856,40 +931,129 @@
     </div>
   </section>
 
+  <!-- ═══ CREATOR PROGRAM ═══ -->
+  <section class="section" id="earn">
+    <div class="section-inner">
+      <div class="rv">
+        <div class="chip mint"><span class="chip-dot"></span>Creator Program</div>
+        <h2 class="sec-h">Build a strategy. <span style="color:var(--mint-dark);">Get paid.</span></h2>
+        <p class="sec-p">Create your own portfolio on TwinTrades and publish it to the marketplace. Every user who subscribes to copy your strategy puts money in your pocket — automatically, every month.</p>
+      </div>
+      <div class="creator-wrap rv">
+        <div class="creator-body">
+          <div class="creator-left">
+            <p style="font-size:18px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgb(255, 255, 255);margin-bottom:24px;">How it works</p>
+            <div class="creator-step">
+              <div class="creator-step-num">01</div>
+              <div class="creator-step-body">
+                <h4>Build Your Strategy</h4>
+                <p>Create a custom portfolio with any mix of stocks, ETFs, or sectors. Set your own rebalancing rules and risk parameters.</p>
+              </div>
+            </div>
+            <div class="creator-step">
+              <div class="creator-step-num">02</div>
+              <div class="creator-step-body">
+                <h4>Publish to the Marketplace</h4>
+                <p>List your portfolio publicly. Show your track record, strategy rationale, and YTD returns to attract subscribers.</p>
+              </div>
+            </div>
+            <div class="creator-step">
+              <div class="creator-step-num">03</div>
+              <div class="creator-step-body">
+                <h4>Earn from Every Subscriber</h4>
+                <p>When other users subscribe to copy your portfolio, you earn a percentage of their subscription fee — passively, every month, for as long as they stay subscribed.</p>
+              </div>
+            </div>
+          </div>
+          <div class="creator-right">
+            <p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:16px;">Creator earnings — example</p>
+            <div class="earn-card">
+              <div class="earn-profile">
+                <div class="earn-avatar">📈</div>
+                <div>
+                  <div class="earn-name">Tech Growth Portfolio</div>
+                  <div class="earn-tag">by @you · Published 6 months ago</div>
+                </div>
+              </div>
+              <div class="earn-stats">
+                <div class="earn-stat">
+                  <div class="earn-stat-v"><span class="m">1,247</span></div>
+                  <div class="earn-stat-l">Subscribers</div>
+                </div>
+                <div class="earn-stat">
+                  <div class="earn-stat-v"><span class="m">$8,729</span></div>
+                  <div class="earn-stat-l">Monthly earnings</div>
+                </div>
+                <div class="earn-stat">
+                  <div class="earn-stat-v"><span class="m">+38.4%</span></div>
+                  <div class="earn-stat-l">YTD return</div>
+                </div>
+                <div class="earn-stat">
+                  <div class="earn-stat-v"><span class="m">#4</span></div>
+                  <div class="earn-stat-l">Marketplace rank</div>
+                </div>
+              </div>
+              <div class="earn-bar-label">
+                <span>Subscriber growth</span>
+                <span style="color:var(--mint);">+68% this month</span>
+              </div>
+              <div class="earn-bar-track"><div class="earn-bar-fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ BROKERAGES ═══ -->
   <section class="section section-alt" id="brokerages">
     <div class="section-inner">
       <div class="rv">
         <div class="chip mint"><span class="chip-dot"></span>Integrations</div>
-        <h2 class="sec-h">Supported <span style="color:var(--mint-dark);">brokerages</span> at launch</h2>
-        <p class="sec-p" style="margin-bottom:28px;">More brokerages will be added post-launch as the platform grows.</p>
+        <h2 class="sec-h">Works with your <span style="color:var(--mint-dark);">brokerage</span></h2>
+        <p class="sec-p" style="margin-bottom:28px;">10+ brokerages planned — connect in seconds with a secure OAuth link.</p>
       </div>
       <div class="brok-card-outer rv">
         <div class="brok-header">
           <h2>Connect your brokerage</h2>
-          <p>Secure OAuth connection · More coming post-launch</p>
+          <p>Secure OAuth connection · 10+ brokerages planned</p>
         </div>
         <div class="brok-list">
           <div class="brok-item">
-            <div>
-              <div class="brok-name">Webull</div>
-              <div class="brok-sub">Commission-free trading</div>
+            <div class="brok-item-left">
+              <div class="brok-icon" style="background:#00C805;"><img src="robinhood-svgrepo-com.svg" alt="Robinhood"></div>
+              <div>
+                <div class="brok-name">Robinhood</div>
+                <div class="brok-sub">Zero-commission investing</div>
+              </div>
             </div>
-            <div class="brok-live"><div class="live-dot"></div>Live at launch</div>
           </div>
           <div class="brok-item">
-            <div>
-              <div class="brok-name">Alpaca</div>
-              <div class="brok-sub">API-first brokerage</div>
+            <div class="brok-item-left">
+              <div class="brok-icon" style="background:#538234;"><img src="fidelity-svgrepo-com.svg" alt="Fidelity"></div>
+              <div>
+                <div class="brok-name">Fidelity</div>
+                <div class="brok-sub">Full-service brokerage</div>
+              </div>
             </div>
-            <div class="brok-live"><div class="live-dot"></div>Live at launch</div>
           </div>
           <div class="brok-item">
-            <div>
-              <div class="brok-name">Charles Schwab</div>
-              <div class="brok-sub">Full-service brokerage</div>
+            <div class="brok-item-left">
+              <div class="brok-icon" style="background:#007DB5;"><img src="schwab-svgrepo-com.svg" alt="Charles Schwab"></div>
+              <div>
+                <div class="brok-name">Charles Schwab</div>
+                <div class="brok-sub">Full-service brokerage</div>
+              </div>
             </div>
-            <div class="brok-live"><div class="live-dot"></div>Live at launch</div>
+          </div>
+          <div class="brok-item">
+            <div class="brok-item-left">
+              <div class="brok-icon" style="background:#5E2D8E;"><img src="etrade-svgrepo-com.svg" alt="E*TRADE"></div>
+              <div>
+                <div class="brok-name">E*TRADE</div>
+                <div class="brok-sub">Morgan Stanley platform</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -900,7 +1064,7 @@
   <div class="stats-ribbon rv">
     <div class="stats-grid">
       <div class="stat-block">
-        <div class="stat-v">3<span class="m">+</span></div>
+        <div class="stat-v">10<span class="m">+</span></div>
         <div class="stat-l">Brokerages</div>
       </div>
       <div class="stat-block">
@@ -925,7 +1089,7 @@
         <div class="cta-top">
           <div class="chip mint" style="margin-bottom:16px;"><span class="chip-dot"></span>Early Access Open</div>
           <h2>Join the waitlist <em>today.</em></h2>
-          <p>Be first in line when Twin Trades opens its doors. Free to join, no commitment required.</p>
+          <p>Be first in line when TwinTrades opens its doors. Free to join, no commitment required.</p>
           <div class="perks">
             <div class="perk">
               <div class="perk-check"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -964,7 +1128,7 @@
     <div class="foot-top">
       <div class="foot-col-brand">
         <div class="foot-brand">
-          <img src="logo.png" alt="Twin Trades"/>
+          <img src="logo.png" alt="TwinTrades"/>
           <div class="foot-wm">Twin<span>Trades</span></div>
         </div>
         <p class="foot-desc">An iOS copy-trading platform that mirrors the portfolios of politicians and elite traders automatically.</p>
@@ -982,7 +1146,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <p>© 2026 Twin Trades. All rights reserved.</p>
+      <p>© 2026 TwinTrades. All rights reserved.</p>
       <div class="foot-badge">iOS · Coming Soon</div>
     </div>
   </footer>
